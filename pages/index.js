@@ -7,7 +7,9 @@ export default function Home() {
     const [endpoint, setEndpoint] = useState();
     const [results, setResults] = useState();
 
-    const benchmark = () => {};
+    const benchmark = async () => {
+        const startTime = performance.now();
+    };
 
     return (
         <div className={styles.container}>
@@ -32,6 +34,7 @@ export default function Home() {
                             type="text"
                             placeholder="Enter URL"
                             spellCheck="false"
+                            required
                         ></input>
                         <div className={styles.group}>
                             <label>Number of NFTs</label>
@@ -40,6 +43,7 @@ export default function Home() {
                                 type="number"
                                 min="1"
                                 max="32"
+                                required
                             ></input>
                         </div>
 
