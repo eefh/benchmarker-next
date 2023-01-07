@@ -4,7 +4,9 @@ import styles from "../styles/Home.module.css";
 import { useState } from "react";
 export default function Home() {
     const [loading, setLoading] = useState(false);
+    const [endpoint, setEndpoint] = useState();
     const [results, setResults] = useState();
+
     const benchmark = () => {};
 
     return (
