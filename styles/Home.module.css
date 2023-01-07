@@ -19,6 +19,12 @@
   align-items:flex-end;
 }
 
+.group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .input {
   padding: 8px;
   background-color: rgb(255, 255, 255);
@@ -28,7 +34,8 @@
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.137);
   border: none;
-    transition: 400ms;
+  transition: 400ms;
+  margin: 4px;
 }
 .input:focus {
   box-shadow: 0px 0px 30px rgba(0, 55, 87, 0.219);
@@ -47,5 +54,9 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.137);
   margin: 16px 0px 0px 0px;
 
+}
+
+.number {
+  text-align: center;
 }
 

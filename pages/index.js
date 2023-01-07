@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 import { useState } from "react";
 export default function Home() {
     const [loading, setLoading] = useState(false);
-    const handleSubmit = () => {};
+    const benchmark = () => {};
 
     return (
         <div className={styles.container}>
@@ -18,7 +18,7 @@ export default function Home() {
             </Head>
 
             <main className={styles.main}>
-                <form onSubmit={handleSubmit} className={styles.form}>
+                <form onSubmit={benchmark} className={styles.form}>
                     <h4>NFT API Benchmark</h4>
                     <p>
                         <em>Select an API provider</em>
@@ -30,6 +30,16 @@ export default function Home() {
                             placeholder="Enter URL"
                             spellCheck="false"
                         ></input>
+                        <div className={styles.group}>
+                            <label>Number of NFTs</label>
+                            <input
+                                className={`${styles.number} ${styles.input}`}
+                                type="number"
+                                min="1"
+                                max="32"
+                            ></input>
+                        </div>
+
                         <button className={styles.button}>Run test</button>
                     </div>
                 </form>
