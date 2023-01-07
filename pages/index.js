@@ -4,13 +4,35 @@ import styles from "../styles/Home.module.css";
 import { useState } from "react";
 export default function Home() {
     const [loading, setLoading] = useState(false);
-    const [endpoint, setEndpoint] = useState();
-    const [results, setResults] = useState();
+    const [status, setStatus] = useState(null);
+    const [responseTime, setResponse] = useState(null);
+    const [formData, setFormData] = useState({
+        endpoint: "",
+        number: 1,
+    });
+    const [results, setResults] = useState([]);
 
-    const benchmark = async () => {
+    const runBenchmark = async (e) => {
+        e.preventDefault();
         const startTime = performance.now();
-    };
+        for (let i = 0; i < formData.number; i++) {
+            const response = await fetch(formData.endpoint);
+            setStatus(response.status);
+        }
+        const endTime = performance.now();
+        const resultTime = Math.floor(endTime - startTime);
 
+        setResponse(resultTime);
+    };
+    const handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
     return (
         <div className={styles.container}>
             <Head>
@@ -23,18 +45,20 @@ export default function Home() {
             </Head>
 
             <main className={styles.main}>
-                <form onSubmit={benchmark} className={styles.form}>
+                <form onSubmit={runBenchmark} className={styles.form}>
                     <h4>NFT API Benchmark</h4>
                     <p>
-                        <em>Select an API provider</em>
+                        <em>Select an endpoint</em>
                     </p>
                     <div className={styles.field}>
                         <input
                             className={styles.input}
-                            type="text"
-                            placeholder="Enter URL"
+                            type="url"
+                            placeholder="Enter a URL"
                             spellCheck="false"
                             required
+                            name="endpoint"
+                            onChange={(e) => handleInputChange(e)}
                         ></input>
                         <div className={styles.group}>
                             <label>Number of NFTs</label>
@@ -43,12 +67,25 @@ export default function Home() {
                                 type="number"
                                 min="1"
                                 max="32"
+                                value={formData.number}
+                                name="number"
                                 required
+                                onChange={handleInputChange}
                             ></input>
                         </div>
 
-                        <button className={styles.button}>Run test</button>
+                        <button type="submit" className={styles.button}>
+                            Run test
+                        </button>
                     </div>
+                    {status && (
+                        <div className={styles.response}>
+                            <p>Response time: {responseTime}</p>
+                            <div className={`${styles.status}`}>
+                                <p>{status}</p>
+                            </div>
+                        </div>
+                    )}
                 </form>
             </main>
         </div>
