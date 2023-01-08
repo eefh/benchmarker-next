@@ -2,37 +2,9 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
+import Form from "../components/Form";
 export default function Home() {
-    const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState(null);
-    const [responseTime, setResponse] = useState(null);
-    const [formData, setFormData] = useState({
-        endpoint: "",
-        number: 1,
-    });
-    const [results, setResults] = useState([]);
-
-    const runBenchmark = async (e) => {
-        e.preventDefault();
-        const startTime = performance.now();
-        for (let i = 0; i < formData.number; i++) {
-            const response = await fetch(formData.endpoint);
-            setStatus(response.status);
-        }
-        const endTime = performance.now();
-        const resultTime = Math.floor(endTime - startTime);
-
-        setResponse(resultTime);
-    };
-    const handleInputChange = (event) => {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+    const [forms, setForms] = useState(1);
     return (
         <div className={styles.container}>
             <Head>
@@ -45,48 +17,30 @@ export default function Home() {
             </Head>
 
             <main className={styles.main}>
-                <form onSubmit={runBenchmark} className={styles.form}>
-                    <h4>NFT API Benchmark</h4>
-                    <p>
-                        <em>Select an endpoint</em>
-                    </p>
-                    <div className={styles.field}>
-                        <input
-                            className={styles.input}
-                            type="url"
-                            placeholder="Enter a URL"
-                            spellCheck="false"
-                            required
-                            name="endpoint"
-                            onChange={(e) => handleInputChange(e)}
-                        ></input>
-                        <div className={styles.group}>
-                            <label>Number of NFTs</label>
-                            <input
-                                className={`${styles.number} ${styles.input}`}
-                                type="number"
-                                min="1"
-                                max="32"
-                                value={formData.number}
-                                name="number"
-                                required
-                                onChange={handleInputChange}
-                            ></input>
-                        </div>
-
-                        <button type="submit" className={styles.button}>
-                            Run test
+                <h4>NFT API Benchmark</h4>
+                <div className={styles.Forms}>
+                    {[...Array(forms)].map((_, i) => (
+                        <Form key={i}></Form>
+                    ))}
+                    <div className={styles.buttons}>
+                        <button
+                            onClick={() => setForms(forms + 1)}
+                            className={styles.add}
+                        >
+                            +
                         </button>
+                        {forms != 1 && (
+                            <button
+                                onClick={() =>
+                                    forms != 1 && setForms(forms - 1)
+                                }
+                                className={styles.add}
+                            >
+                                -
+                            </button>
+                        )}
                     </div>
-                    {status && (
-                        <div className={styles.response}>
-                            <p>Response time: {responseTime}</p>
-                            <div className={`${styles.status}`}>
-                                <p>{status}</p>
-                            </div>
-                        </div>
-                    )}
-                </form>
+                </div>
             </main>
         </div>
     );
