@@ -9,6 +9,9 @@ export default function Form() {
         endpoint: "",
         number: 1,
     });
+    const [data, setData] = useState(null);
+    const [size, setSize] = useState(null);
+    const [statusClass, setStatusClass] = useState(false);
     const [results, setResults] = useState([]);
 
     const runBenchmark = async (e) => {
@@ -18,13 +21,27 @@ export default function Form() {
         const startTime = performance.now();
         for (let i = 0; i < formData.number; i++) {
             const response = await fetch(formData.endpoint);
+            const data = await response.json();
+            console.log(data);
+            setData(data);
             setStatus(response.status);
+            const size = await response.headers.get("Content-Length");
+            setSize(size);
+            await console.log(size);
+            response.status === 200
+                ? setStatusClass(true)
+                : setStatusClass(false);
         }
         const endTime = performance.now();
         const resultTime = Math.floor(endTime - startTime);
 
         setResponse(resultTime);
         setLoading(false);
+    };
+    const determineClass = () => {
+        return statusClass
+            ? `${styles.status}`
+            : `${styles.status} ${styles.red} `;
     };
     const handleInputChange = (event) => {
         const target = event.target;
@@ -49,7 +66,9 @@ export default function Form() {
                     required
                     name="endpoint"
                     onChange={(e) => handleInputChange(e)}
+                    autoComplete="off"
                 ></input>
+
                 <div className={styles.group}>
                     <label>Number of NFTs</label>
                     <input
@@ -61,6 +80,7 @@ export default function Form() {
                         name="number"
                         required
                         onChange={handleInputChange}
+                        autoComplete="off"
                     ></input>
                 </div>
 
@@ -75,8 +95,8 @@ export default function Form() {
             )}
             {status && (
                 <div className={styles.response}>
-                    <p>Response time: {responseTime}</p>
-                    <div className={`${styles.status}`}>
+                    <p>Response time: {responseTime}ms</p>
+                    <div className={determineClass()}>
                         <p>{status}</p>
                     </div>
                 </div>
